@@ -5,14 +5,12 @@ import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
-import Avatar from '@mui/material/Avatar'
 import IconButton, { IconButtonProps } from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
+import Rating from '@mui/material/Rating'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
@@ -29,7 +27,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }))
 
-export default function RecipeReviewCard() {
+export default function ProductCard({ item }: any) {
   const [expanded, setExpanded] = React.useState(false)
 
   const handleExpandClick = () => {
@@ -37,30 +35,26 @@ export default function RecipeReviewCard() {
   }
 
   return (
-    <Card sx={{ maxWidth: 345, border: '1px solid RGBA( 0, 128, 128, 1 )' }}>
+    <Card
+      sx={{
+        maxWidth: 345,
+        border: '1px solid RGBA( 0, 128, 128, 1 )',
+        height: 450,
+      }}
+    >
       <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
         action={
           <IconButton aria-label="settings">
-            <MoreVertIcon />
+            <Rating name="disabled" value={item.rating} />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={item.brand}
+        subheader={`${item.price}$ - Stock: ${item.stock}`}
       />
-      <CardMedia
-        component="img"
-        height="194"
-        image="https://images.unsplash.com/photo-1553456558-aff63285bdd1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2R1Y3R8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60"
-        alt="Paella dish"
-      />
+      <CardMedia component="img" height="194" image={item.thumbnail} />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish.
+          {item.description}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

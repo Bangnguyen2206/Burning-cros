@@ -6,7 +6,7 @@ import { handleResponseError } from "./common";
 const redirectSuffix = `/auth/login?next=/home`;
 
 const axiosInstance = axios.create({
-  withCredentials: true,
+  withCredentials: false,
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
