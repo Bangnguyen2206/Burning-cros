@@ -1,5 +1,5 @@
 import { GET_PRODUCT_LIST, SEARCH_PRODUCT_LIST } from "actions/Product";
-import React, { createContext, useReducer, useState } from "react";
+import { createContext, useReducer, useState } from "react";
 import {
   initialStateProduct,
   productReducer,
@@ -10,30 +10,43 @@ export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const [products, dispatch] = useReducer(productReducer, initialStateProduct);
-  const [isSearch, setIsSearch] = useState(false);
-
   const [flag, setFlag] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const fetchProductList = async () => {
-    setIsSearch(true);
-    return await productApi.getListProduct().then((res) => {
-      dispatch({
-        type: GET_PRODUCT_LIST,
-        payload: res.data,
+  const fetchProductList = async (pageNumber) => {
+    setIsLoading(true);
+    return await productApi
+      .getListProduct(pageNumber)
+      .then((res) => {
+        setIsLoading(false);
+        dispatch({
+          type: GET_PRODUCT_LIST,
+          payload: res.data,
+        });
+        return res.data;
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        return err;
       });
-      return res.data;
-    });
   };
 
   const searchProductList = async (params) => {
-    setIsSearch(true);
-    return await productApi.searchProductList(params).then((res) => {
-      dispatch({
-        type: SEARCH_PRODUCT_LIST,
-        payload: res.data,
+    setIsLoading(true);
+    return await productApi
+      .searchProductList(params)
+      .then((res) => {
+        setIsLoading(false);
+        dispatch({
+          type: SEARCH_PRODUCT_LIST,
+          payload: res.data,
+        });
+        return res.data;
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        return err;
       });
-      return res.data;
-    });
   };
 
   const recallApi = () => {
@@ -46,7 +59,7 @@ export const ProductProvider = ({ children }) => {
     recallApi,
     fetchProductList,
     searchProductList,
-    isSearch,
+    isLoading,
   };
 
   return (

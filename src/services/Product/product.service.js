@@ -2,8 +2,8 @@ import { productPrefix } from "constants/constants";
 import axiosClient from "helpers/httpClient";
 
 const productApi = {
-  getListProduct() {
-    const url = `${productPrefix}products`;
+  getListProduct(pageNumber) {
+    const url = `${productPrefix}products?limit=${pageNumber}`;
     return axiosClient.get(url);
   },
   searchProductList(params) {
