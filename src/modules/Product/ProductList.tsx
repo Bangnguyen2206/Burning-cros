@@ -6,19 +6,25 @@ import { Stack } from '@mui/system'
 import Grid from '@mui/material/Grid'
 import ProductCard from '@components/ProductCart/ProductCart'
 import FullTextField from '@components/FullTextField/TextField'
-
 import { ProductContext } from 'contexts/Product/Product'
 import { ProductItem } from 'constants/constants'
 import LoadingSpinner from '@components/LoadingSpinner/LoadingSpinner'
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
 
 export default function ProductList() {
-  const { products, fetchProductList, isLoading, hasMore } = useContext(
-    ProductContext,
-  )
+  const {
+    products,
+    fetchProductList,
+    isLoading,
+    hasMore,
+    searchProductList,
+  } = useContext(ProductContext)
   const [pageNumber, setPageNumber] = useState(0)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [listProducts, setListProducts] = useState<any>([])
   const [visible, setVisible] = useState(false)
+  const [search, setSearch] = useState(false)
 
   const onIntersection = (entries: any) => {
     const firstEntry = entries[0].isIntersecting
@@ -26,6 +32,17 @@ export default function ProductList() {
       setVisible(true)
       setPageNumber((prevPageNumber) => prevPageNumber + 2)
     }
+  }
+
+  const handleChangeSearch = (params: string) => {
+    setSearch(true)
+    searchProductList(params)
+      .then((res: any) => {
+        setListProducts(res.products)
+      })
+      .catch((error: string) => {
+        return error
+      })
   }
 
   useEffect(() => {
@@ -51,7 +68,7 @@ export default function ProductList() {
   }
 
   const handleGetMoreProduct = () => {
-    if (visible) {
+    if (visible && !search) {
       fetchProductList(pageNumber)
         .then((res: any) => {
           setVisible(false)
@@ -73,12 +90,27 @@ export default function ProductList() {
 
   return (
     <div>
-      {isLoading && !hasMore ? (
+      {isLoading && !hasMore && !search ? (
         <LoadingSpinner />
       ) : (
         <Stack sx={{ margin: '10px 30px', position: 'relative' }}>
           <Stack sx={{ height: 150 }}>
-            <FullTextField />
+            <Box
+              sx={{
+                width: 500,
+                maxWidth: '100%',
+              }}
+            >
+              <TextField
+                fullWidth
+                label="Search...."
+                id="fullWidth"
+                onChange={(e) => {
+                  handleChangeSearch(e.target.value)
+                }}
+                sx={{ marginBottom: '30px', marginTop: '30px' }}
+              />
+            </Box>
           </Stack>
           <Stack>
             <Grid
