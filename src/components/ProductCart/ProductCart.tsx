@@ -27,7 +27,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }))
 
-export default function ProductCard({ item }: any) {
+const ProductCard = React.forwardRef(({ item }: any, ref: any) => {
   const [expanded, setExpanded] = React.useState(false)
 
   const handleExpandClick = () => {
@@ -41,6 +41,7 @@ export default function ProductCard({ item }: any) {
         border: '1px solid RGBA( 0, 128, 128, 1 )',
         height: 450,
       }}
+      ref={ref}
     >
       <CardHeader
         action={
@@ -54,25 +55,10 @@ export default function ProductCard({ item }: any) {
       <CardMedia component="img" height="194" image={item.thumbnail} />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {item.description}
+          {item.description.slice(0, 50)}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
     </Card>
   )
-}
+})
+export default ProductCard

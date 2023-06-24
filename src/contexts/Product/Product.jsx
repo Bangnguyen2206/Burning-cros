@@ -12,6 +12,7 @@ export const ProductProvider = ({ children }) => {
   const [products, dispatch] = useReducer(productReducer, initialStateProduct);
   const [flag, setFlag] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
 
   const fetchProductList = async (pageNumber) => {
     setIsLoading(true);
@@ -19,6 +20,7 @@ export const ProductProvider = ({ children }) => {
       .getListProduct(pageNumber)
       .then((res) => {
         setIsLoading(false);
+        setHasMore(res.data.products.length > 0);
         dispatch({
           type: GET_PRODUCT_LIST,
           payload: res.data,
@@ -48,7 +50,6 @@ export const ProductProvider = ({ children }) => {
         return err;
       });
   };
-
   const recallApi = () => {
     setFlag(!flag);
   };
@@ -60,6 +61,7 @@ export const ProductProvider = ({ children }) => {
     fetchProductList,
     searchProductList,
     isLoading,
+    hasMore,
   };
 
   return (
