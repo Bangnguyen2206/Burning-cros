@@ -9,7 +9,6 @@ import FullTextField from '@components/FullTextField/TextField'
 
 import { ProductContext } from 'contexts/Product/Product'
 import { ProductItem } from 'constants/constants'
-import NotFound from '@components/NotFound/NotFound'
 import LoadingSpinner from '@components/LoadingSpinner/LoadingSpinner'
 
 export default function ProductList() {
