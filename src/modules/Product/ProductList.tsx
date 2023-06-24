@@ -5,12 +5,12 @@ import { useContext, useState, useEffect, useRef } from 'react'
 import { Stack } from '@mui/system'
 import Grid from '@mui/material/Grid'
 import ProductCard from '@components/ProductCart/ProductCart'
-import FullTextField from '@components/FullTextField/TextField'
 import { ProductContext } from 'contexts/Product/Product'
 import { ProductItem } from 'constants/constants'
 import LoadingSpinner from '@components/LoadingSpinner/LoadingSpinner'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
+import NotFound from '@components/NotFound/NotFound'
 
 export default function ProductList() {
   const {
@@ -20,6 +20,7 @@ export default function ProductList() {
     hasMore,
     searchProductList,
   } = useContext(ProductContext)
+
   const [pageNumber, setPageNumber] = useState(0)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [listProducts, setListProducts] = useState<any>([])
@@ -112,26 +113,30 @@ export default function ProductList() {
               />
             </Box>
           </Stack>
-          <Stack>
-            <Grid
-              container
-              rowSpacing={1}
-              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            >
-              {listProducts?.map((product: ProductItem, idx: string) => (
-                <Grid
-                  item
-                  xs={12}
-                  md={4}
-                  lg={3}
-                  sx={{ marginBottom: '10px' }}
-                  key={`${product?.brand}-${idx}`}
-                >
-                  <ProductCard item={product} ref={containerRef} />
-                </Grid>
-              ))}
-            </Grid>
-          </Stack>
+          {listProducts.length > 0 ? (
+            <Stack>
+              <Grid
+                container
+                rowSpacing={1}
+                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+              >
+                {listProducts?.map((product: ProductItem, idx: string) => (
+                  <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    lg={3}
+                    sx={{ marginBottom: '10px' }}
+                    key={`${product?.brand}-${idx}`}
+                  >
+                    <ProductCard item={product} ref={containerRef} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Stack>
+          ) : (
+            <NotFound />
+          )}
         </Stack>
       )}
     </div>

@@ -10,12 +10,12 @@ export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const [products, dispatch] = useReducer(productReducer, initialStateProduct);
-  const [flag, setFlag] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
 
   const fetchProductList = async (pageNumber) => {
     setIsLoading(true);
+
     return await productApi
       .getListProduct(pageNumber)
       .then((res) => {
@@ -35,6 +35,7 @@ export const ProductProvider = ({ children }) => {
 
   const searchProductList = async (params) => {
     setIsLoading(true);
+
     return await productApi
       .searchProductList(params)
       .then((res) => {
@@ -50,14 +51,8 @@ export const ProductProvider = ({ children }) => {
         return err;
       });
   };
-  const recallApi = () => {
-    setFlag(!flag);
-  };
-
   const productsDocument = {
     products,
-    flag,
-    recallApi,
     fetchProductList,
     searchProductList,
     isLoading,
