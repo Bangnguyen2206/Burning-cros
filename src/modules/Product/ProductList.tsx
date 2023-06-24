@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useState, useEffect, useCallback, useRef } from 'react'
+import { useContext, useState, useEffect, useRef } from 'react'
 import { Stack } from '@mui/system'
 import Grid from '@mui/material/Grid'
 import ProductCard from '@components/ProductCart/ProductCart'
@@ -52,7 +52,7 @@ export default function ProductList() {
   }
 
   const handleGetMoreProduct = () => {
-    if (hasMore) {
+    if (visible) {
       fetchProductList(pageNumber)
         .then((res: any) => {
           setVisible(false)
@@ -63,6 +63,7 @@ export default function ProductList() {
         })
     }
   }
+
   useEffect(() => {
     handleGetMoreProduct()
   }, [visible])
@@ -72,33 +73,36 @@ export default function ProductList() {
   }, [])
 
   return (
-    <>
-      <Stack sx={{ margin: '10px 30px', position: 'relative' }}>
-        <Stack sx={{ height: 150 }}>
-          <FullTextField />
+    <div>
+      {isLoading && !hasMore ? (
+        <LoadingSpinner />
+      ) : (
+        <Stack sx={{ margin: '10px 30px', position: 'relative' }}>
+          <Stack sx={{ height: 150 }}>
+            <FullTextField />
+          </Stack>
+          <Stack>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              {listProducts?.map((product: ProductItem, idx: string) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  lg={3}
+                  sx={{ marginBottom: '10px' }}
+                  key={`${product?.brand}-${idx}`}
+                >
+                  <ProductCard item={product} ref={containerRef} />
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
         </Stack>
-
-        <Stack>
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
-            {listProducts?.map((product: ProductItem, idx: string) => (
-              <Grid
-                item
-                xs={12}
-                md={4}
-                lg={3}
-                sx={{ marginBottom: '10px' }}
-                key={`${product?.brand}-${idx}`}
-              >
-                <ProductCard item={product} ref={containerRef} />
-              </Grid>
-            ))}
-          </Grid>
-        </Stack>
-      </Stack>
-    </>
+      )}
+    </div>
   )
 }

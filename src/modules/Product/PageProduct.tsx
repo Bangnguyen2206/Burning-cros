@@ -1,11 +1,9 @@
-import { ProductProvider } from "contexts/Product/Product";
-import React from "react";
-import ProductList from "./ProductList";
+import { ProductContext } from 'contexts/Product/Product'
+import { useContext } from 'react'
+import ProductList from './ProductList'
+import SearchProduct from './SearchProduct'
 
 export default function PageProduct() {
-  return (
-    <ProductProvider>
-      <ProductList />
-    </ProductProvider>
-  );
+  const { products } = useContext(ProductContext)
+  return <>{products.isMethod ? <SearchProduct /> : <ProductList />}</>
 }

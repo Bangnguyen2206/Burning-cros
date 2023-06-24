@@ -3,6 +3,7 @@ import { GET_PRODUCT_LIST, SEARCH_PRODUCT_LIST } from "actions/Product";
 // eslint-disable-next-line no-unused-vars
 export const initialStateProduct = {
   products: [],
+  isMethod: false,
 };
 
 export const productReducer = (state = initialStateProduct, action) => {
@@ -12,7 +13,7 @@ export const productReducer = (state = initialStateProduct, action) => {
     case GET_PRODUCT_LIST:
       return { ...state, products: payload.products };
     case SEARCH_PRODUCT_LIST:
-      return { ...state, products: payload.products };
+      return { ...state, products: payload.products, isMethod: true };
 
     default:
       return state;
