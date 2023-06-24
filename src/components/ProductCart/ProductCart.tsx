@@ -55,7 +55,7 @@ const ProductCard = React.forwardRef(({ item }: any, ref: any) => {
       <CardMedia component="img" height="194" image={item.thumbnail} />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {item.description.slice(0, 50)}
+          {item.description}
         </Typography>
       </CardContent>
     </Card>
