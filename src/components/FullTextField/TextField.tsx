@@ -10,6 +10,7 @@ export default function FullTextField() {
   const handleChangeSearch = (params: string) => {
     searchProductList(params)
   }
+
   return (
     <Box
       sx={{

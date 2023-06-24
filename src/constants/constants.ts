@@ -11,3 +11,5 @@ export interface ProductItem {
     thumbnail: string
     title: string
   }
+
+  export const productPrefix = "https://dummyjson.com/";

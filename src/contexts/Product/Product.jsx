@@ -10,10 +10,12 @@ export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const [products, dispatch] = useReducer(productReducer, initialStateProduct);
+  const [isSearch, setIsSearch] = useState(false);
 
   const [flag, setFlag] = useState(false);
 
   const fetchProductList = async () => {
+    setIsSearch(true);
     return await productApi.getListProduct().then((res) => {
       dispatch({
         type: GET_PRODUCT_LIST,
@@ -24,6 +26,7 @@ export const ProductProvider = ({ children }) => {
   };
 
   const searchProductList = async (params) => {
+    setIsSearch(true);
     return await productApi.searchProductList(params).then((res) => {
       dispatch({
         type: SEARCH_PRODUCT_LIST,
@@ -43,6 +46,7 @@ export const ProductProvider = ({ children }) => {
     recallApi,
     fetchProductList,
     searchProductList,
+    isSearch,
   };
 
   return (

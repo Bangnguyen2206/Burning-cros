@@ -1,6 +1,5 @@
+import { productPrefix } from "constants/constants";
 import axiosClient from "helpers/httpClient";
-
-const productPrefix = "https://dummyjson.com/";
 
 const productApi = {
   getListProduct() {
@@ -9,6 +8,7 @@ const productApi = {
   },
   searchProductList(params) {
     const url = `${productPrefix}products/search?q=${params}`;
+
     return axiosClient.get(url);
   },
 };

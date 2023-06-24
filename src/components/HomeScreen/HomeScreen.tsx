@@ -1,7 +1,7 @@
 import { Stack, Grid, Typography } from '@mui/material'
 import notFound from 'assets/notFound.png'
 
-function NotFound() {
+function HomeScreen() {
   return (
     <Grid
       container
@@ -31,7 +31,7 @@ function NotFound() {
         }}
         color="secondary.main"
       >
-        Không tìm thấy
+        Hãy tìm sản phẩm nào
       </Typography>
 
       <Typography
@@ -45,10 +45,10 @@ function NotFound() {
         }}
         color="text.primary"
       >
-        Rất tiếc, không thể tìm thấy sản phẩm bạn yêu cầu
+        Tìm bất cứ sản phẩm nào mà bạn muốn
       </Typography>
     </Grid>
   )
 }
 
-export default NotFound
+export default HomeScreen
