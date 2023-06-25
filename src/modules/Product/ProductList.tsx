@@ -35,18 +35,23 @@ export default function ProductList() {
   }, [])
 
   useEffect(() => {
+    setPageNumber(0)
     const url = `${productPrefix}products/search?q=${params}`
-    axiosClient
-      .get(url, { cancelToken: newCancelToken() })
-      .then((res: any) => {
-        setListProducts(res.data.products)
-      })
-      .catch((error: string) => {
-        if (axios.isCancel(error)) return
-      })
-    setVisible(true)
-    return () => {
-      axiosSource.current.cancel()
+    if (params) {
+      axiosClient
+        .get(url, { cancelToken: newCancelToken() })
+        .then((res: any) => {
+          setListProducts(res.data.products)
+        })
+        .catch((error: string) => {
+          if (axios.isCancel(error)) return
+        })
+      setVisible(true)
+      return () => {
+        axiosSource.current.cancel()
+      }
+    } else {
+      getProducts()
     }
   }, [newCancelToken, isCancel, params])
 
@@ -60,14 +65,6 @@ export default function ProductList() {
 
   const handleChangeSearch = (params: string) => {
     setSearch(true)
-    // searchProductList(params)
-    //   .then((res: any) => {
-    //     setListProducts(res.products)
-    //   })
-    //   .catch((error: string) => {
-    //     return error
-    //   })
-    // makeRequestCreator(params)
     setParams(params)
   }
 
