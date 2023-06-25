@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid'
 import ProductCard from '@components/ProductCart/ProductCart'
 import { ProductContext } from 'contexts/Product/Product'
 import { ProductItem, productPrefix } from 'constants/constants'
-import LoadingSpinner from '@components/LoadingSpinner/LoadingSpinner'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import NotFound from '@components/NotFound/NotFound'
@@ -17,13 +16,9 @@ import axios from 'axios'
 import axiosClient from 'helpers/httpClient'
 
 export default function ProductList() {
-  const {
-    products,
-    fetchProductList,
-    isLoading,
-    hasMore,
-    resetHasMore,
-  } = useContext(ProductContext)
+  const { products, fetchProductList, hasMore, resetHasMore } = useContext(
+    ProductContext,
+  )
 
   const [pageNumber, setPageNumber] = useState(0)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -32,7 +27,6 @@ export default function ProductList() {
   const [search, setSearch] = useState(false)
   const [params, setParams] = useState('')
   const axiosSource = useRef<any>(null)
-  const [isEngine, setIsEngine] = useState(false)
 
   const newCancelToken = useCallback(() => {
     axiosSource.current = axios?.CancelToken?.source()
