@@ -51,12 +51,18 @@ export const ProductProvider = ({ children }) => {
         return err;
       });
   };
+
+  const resetHasMore = () => {
+    setHasMore(!hasMore);
+  };
+
   const productsDocument = {
     products,
     fetchProductList,
     searchProductList,
     isLoading,
     hasMore,
+    resetHasMore,
   };
 
   return (

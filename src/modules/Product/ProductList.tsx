@@ -17,9 +17,13 @@ import axios from 'axios'
 import axiosClient from 'helpers/httpClient'
 
 export default function ProductList() {
-  const { products, fetchProductList, isLoading, hasMore } = useContext(
-    ProductContext,
-  )
+  const {
+    products,
+    fetchProductList,
+    isLoading,
+    hasMore,
+    resetHasMore,
+  } = useContext(ProductContext)
 
   const [pageNumber, setPageNumber] = useState(0)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -28,6 +32,7 @@ export default function ProductList() {
   const [search, setSearch] = useState(false)
   const [params, setParams] = useState('')
   const axiosSource = useRef<any>(null)
+  const [isEngine, setIsEngine] = useState(false)
 
   const newCancelToken = useCallback(() => {
     axiosSource.current = axios?.CancelToken?.source()
@@ -46,12 +51,14 @@ export default function ProductList() {
         .catch((error: string) => {
           if (axios.isCancel(error)) return
         })
-      setVisible(true)
+
       return () => {
         axiosSource.current.cancel()
       }
     } else {
       getProducts()
+      resetHasMore()
+      setSearch(false)
     }
   }, [newCancelToken, isCancel, params])
 
@@ -106,7 +113,7 @@ export default function ProductList() {
 
   useEffect(() => {
     handleGetMoreProduct()
-  }, [visible])
+  }, [visible, hasMore])
 
   useEffect(() => {
     getProducts()
@@ -114,54 +121,50 @@ export default function ProductList() {
 
   return (
     <div>
-      {isLoading && !hasMore && !search ? (
-        <LoadingSpinner />
-      ) : (
-        <Stack sx={{ margin: '10px 30px', position: 'relative' }}>
-          <Stack sx={{ height: 150 }}>
-            <Box
-              sx={{
-                width: 500,
-                maxWidth: '100%',
+      <Stack sx={{ margin: '10px 30px', position: 'relative' }}>
+        <Stack sx={{ height: 150 }}>
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: '100%',
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Search...."
+              id="fullWidth"
+              onChange={(e) => {
+                handleChangeSearch(e.target.value)
               }}
-            >
-              <TextField
-                fullWidth
-                label="Search...."
-                id="fullWidth"
-                onChange={(e) => {
-                  handleChangeSearch(e.target.value)
-                }}
-                sx={{ marginBottom: '30px', marginTop: '30px' }}
-              />
-            </Box>
-          </Stack>
-          {listProducts.length > 0 ? (
-            <Stack>
-              <Grid
-                container
-                rowSpacing={1}
-                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-              >
-                {listProducts?.map((product: ProductItem, idx: string) => (
-                  <Grid
-                    item
-                    xs={12}
-                    md={4}
-                    lg={3}
-                    sx={{ marginBottom: '10px' }}
-                    key={`${product?.brand}-${idx}`}
-                  >
-                    <ProductCard item={product} ref={containerRef} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Stack>
-          ) : (
-            <NotFound />
-          )}
+              sx={{ marginBottom: '30px', marginTop: '30px' }}
+            />
+          </Box>
         </Stack>
-      )}
+        {listProducts.length > 0 ? (
+          <Stack>
+            <Grid
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              {listProducts?.map((product: ProductItem, idx: string) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  lg={3}
+                  sx={{ marginBottom: '10px' }}
+                  key={`${product?.brand}-${idx}`}
+                >
+                  <ProductCard item={product} ref={containerRef} />
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
+        ) : (
+          <NotFound />
+        )}
+      </Stack>
     </div>
   )
 }
